@@ -9,8 +9,15 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(Drogon CONFIG REQUIRED)
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 find_package(unofficial-sodium CONFIG REQUIRED)
+find_package(GTest CONFIG REQUIRED)
+
+
+# ==========================================
+# Main Application
+# ==========================================
 
 add_executable(DharaniMart
+
     src/main.cpp
 
     src/repository/UserRepository.cpp
@@ -32,9 +39,10 @@ add_executable(DharaniMart
     src/repository/ReviewRepository.cpp
     src/service/ReviewService.cpp
     src/controller/ReviewController.cpp
+
     src/repository/AdminRepository.cpp
     src/service/AdminService.cpp
-     src/controller/AdminController.cpp
+    src/controller/AdminController.cpp
 )
 
 target_link_libraries(DharaniMart
@@ -45,3 +53,39 @@ target_link_libraries(DharaniMart
 )
 
 target_compile_features(DharaniMart PRIVATE cxx_std_20)
+
+
+# ==========================================
+# GoogleTest + GoogleMock
+# ==========================================
+
+enable_testing()
+
+add_executable(DharaniMartTests
+
+    tests/test_main.cpp
+
+    src/service/UserService.cpp
+)
+
+
+target_link_libraries(DharaniMartTests
+    PRIVATE
+    GTest::gmock_main
+    Drogon::Drogon
+    unofficial::sqlite3::sqlite3
+    unofficial-sodium::sodium
+)
+
+
+target_compile_features(DharaniMartTests
+    PRIVATE
+    cxx_std_20
+)
+include(GoogleTest)
+
+gtest_discover_tests(
+    DharaniMartTests
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    DISCOVERY_MODE PRE_TEST
+)

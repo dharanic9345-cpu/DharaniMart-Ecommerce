@@ -1,5 +1,9 @@
 #include "UserController.h"
-
+UserController::UserController()
+    : userRepository(),
+      userService(userRepository)
+{
+}
 void UserController::registerUser(
     const drogon::HttpRequestPtr& request,
     std::function<void(const drogon::HttpResponsePtr&)>&& callback)

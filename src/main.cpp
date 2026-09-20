@@ -51,6 +51,7 @@ int main()
 
     drogon::app()
         .setLogLevel(trantor::Logger::kInfo)
+        .setDocumentRoot("./frontend")
         .addListener("127.0.0.1", 8080)
         .registerHandler(
             "/api/v1/health",

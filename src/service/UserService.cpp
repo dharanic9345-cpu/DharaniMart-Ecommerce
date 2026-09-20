@@ -1,5 +1,13 @@
 #include "UserService.h"
+
 #include <sodium.h>
+
+
+UserService::UserService(IUserRepository& repository)
+    : userRepository(repository)
+{
+}
+
 
 bool UserService::registerUser(const User& user)
 {
@@ -27,9 +35,12 @@ bool UserService::registerUser(const User& user)
     return userRepository.createUser(newUser);
 }
 
-User UserService::loginUser(const std::string& email, const std::string& password)
+
+User UserService::loginUser(
+    const std::string& email,
+    const std::string& password)
 {
-   User user = userRepository.findByEmail(email);
+    User user = userRepository.findByEmail(email);
 
     if (user.id == 0)
     {
@@ -50,5 +61,4 @@ User UserService::loginUser(const std::string& email, const std::string& passwor
     }
 
     return user;
-
 }
