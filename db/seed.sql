@@ -1,0 +1,2 @@
+-- DharaniMart seed data.
+-- Admin seed will be added with the authentication migration.

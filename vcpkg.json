@@ -1,0 +1,12 @@
+{
+  "name": "dharani-mart",
+  "version-string": "0.1.0",
+  "description": "DharaniMart - Native C++20 multi-seller e-commerce marketplace",
+  "builtin-baseline": "e6f9e70a29a3e80a1fc510d8503304315447112f",
+  "dependencies": [
+    "drogon",
+    "sqlite3",
+    "nlohmann-json",
+    "libsodium"
+  ]
+}

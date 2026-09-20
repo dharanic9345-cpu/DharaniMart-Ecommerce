@@ -1,0 +1,8 @@
+build/
+.vscode/
+.env
+*.log
+*.user
+*.suo
+vcpkg_installed/
+db/*.db
