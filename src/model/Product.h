@@ -9,6 +9,8 @@ struct Product
 
     std::string name;
     std::string description;
+    std::string imageUrl;   // Product image path
+
     double price = 0.0;
     int stock = 0;
     std::string category;

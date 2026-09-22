@@ -1,288 +1,412 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>DharaniMart</title>
+    <title>DharaniMart - Products</title>
 
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
 
+        body {
+            background: #f5f5f5;
+        }
+
+        header {
+            background: #232f3e;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            color: #ff9900;
+        }
+
+        .container {
+            width: 90%;
+            margin: 30px auto;
+        }
+
+        .container h2 {
+            margin-bottom: 25px;
+            color: #222;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+            transition: 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.18);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .product-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+            color: #222;
+        }
+
+        .description {
+            color: #666;
+            margin: 10px 0;
+            min-height: 45px;
+        }
+
+        .price {
+            font-size: 21px;
+            font-weight: bold;
+            color: #b12704;
+            margin: 10px 0;
+        }
+
+        .category {
+            display: inline-block;
+            background: #e8f0fe;
+            color: #174ea6;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .buy-btn {
+            width: 100%;
+            padding: 11px;
+            border: none;
+            border-radius: 7px;
+            background: #ff9900;
+            color: #111;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .buy-btn:hover {
+            background: #ffad33;
+        }
+    </style>
 </head>
 
 <body>
 
-    <!-- HEADER -->
+<header>
+    <h1>🛒 DharaniMart</h1>
 
-    <header>
+    <div class="header-right">
+        <span>Online Shopping Marketplace</span>
 
-        <h1>DharaniMart</h1>
+        <button onclick="showLogin()">Login</button>
 
-        <nav>
+        <button onclick="showRegister()">Register</button>
+    </div>
+</header>
 
-            <a href="#">Home</a>
-            <a href="#products">Products</a>
-            <a href="#login">Login</a>
-            <a href="#register">Register</a>
-            <a href="#cart">Cart</a>
-            <a href="#orders">Orders</a>
-            <a href="#reviews">Reviews</a>
-            <a href="#admin">Admin</a>
-            <a href="#chatbot">AI Assistant</a>
+<div class="container">
 
-        </nav>
+    <h2>Our Products</h2>
 
-    </header>
+    <div class="products">
 
+        <!-- 1 -->
+        <div class="product-card">
+            <img src="/uploads/products/laptop1.jpg" alt="Laptop">
 
-    <!-- WELCOME -->
+            <div class="product-name">Laptop</div>
 
-    <section class="welcome">
+            <span class="category">Electronics</span>
 
-        <h2>Welcome to DharaniMart</h2>
-
-        <p>Simple Online Shopping</p>
-
-        <button onclick="showProducts()">
-            View Products
-        </button>
-
-    </section>
-
-
-    <!-- PRODUCTS -->
-
-    <section id="products">
-
-        <h2>Products</h2>
-
-        <div id="productList">
-
-            <p>Loading products...</p>
-
-        </div>
-
-    </section>
-
-
-    <!-- LOGIN -->
-
-    <section id="login">
-
-        <h2>Login</h2>
-
-        <input
-            type="email"
-            id="loginEmail"
-            placeholder="Email"
-        >
-
-        <input
-            type="password"
-            id="loginPassword"
-            placeholder="Password"
-        >
-
-        <button onclick="login()">
-            Login
-        </button>
-
-    </section>
-
-
-    <!-- REGISTER -->
-
-    <section id="register">
-
-        <h2>Register</h2>
-
-        <input
-            type="text"
-            id="registerName"
-            placeholder="Name"
-        >
-
-        <input
-            type="email"
-            id="registerEmail"
-            placeholder="Email"
-        >
-
-        <input
-            type="password"
-            id="registerPassword"
-            placeholder="Password"
-        >
-
-        <button onclick="register()">
-            Register
-        </button>
-
-    </section>
-
-
-    <!-- CART -->
-
-    <section id="cart">
-
-        <h2>Shopping Cart</h2>
-
-        <div id="cartMessage">
-
-            <p>Your cart is empty.</p>
-
-        </div>
-
-    </section>
-
-
-    <!-- ORDER HISTORY -->
-
-    <section id="orders">
-
-        <h2>Order History</h2>
-
-        <div id="orderList">
-
-            <p>Loading orders...</p>
-
-        </div>
-
-    </section>
-
-
-    <!-- REVIEWS -->
-
-    <section id="reviews">
-
-        <h2>Product Reviews & Ratings</h2>
-
-        <input
-            type="number"
-            id="reviewProductId"
-            placeholder="Product ID"
-        >
-
-        <input
-            type="number"
-            id="reviewRating"
-            placeholder="Rating (1-5)"
-            min="1"
-            max="5"
-        >
-
-        <input
-            type="text"
-            id="reviewComment"
-            placeholder="Write your review"
-        >
-
-        <button onclick="addReview()">
-            Submit Review
-        </button>
-
-        <button onclick="loadReviews()">
-            View Reviews
-        </button>
-
-        <div id="reviewList">
-
-            <p>
-                Enter Product ID and click View Reviews.
-            </p>
-
-        </div>
-
-    </section>
-
-
-    <!-- ADMIN -->
-
-    <section id="admin">
-
-        <h2>Admin Management</h2>
-
-        <p>
-            Manage Users, Products and Orders
-        </p>
-
-
-        <div class="admin-buttons">
-
-            <button onclick="loadAdminUsers()">
-                View Users
-            </button>
-
-            <button onclick="loadAdminProducts()">
-                View Products
-            </button>
-
-            <button onclick="loadAdminOrders()">
-                View Orders
-            </button>
-
-        </div>
-
-
-        <div id="adminUsers"></div>
-
-        <div id="adminProducts"></div>
-
-        <div id="adminOrders"></div>
-
-    </section>
-
-
-    <!-- AI CHATBOT -->
-
-    <section id="chatbot">
-
-        <h2>🤖 DharaniMart AI Assistant</h2>
-
-        <p>
-            Ask me about products, cart, orders or DharaniMart.
-        </p>
-
-
-        <div id="chatBox">
-
-            <div class="bot-message">
-
-                Hello! I'm DharaniMart Assistant.
-                How can I help you?
-
+            <div class="description">
+                Powerful laptop suitable for students, office work and programming.
             </div>
 
+            <div class="price">₹45,000</div>
+
+            <button class="buy-btn">Add to Cart</button>
         </div>
 
 
-        <input
-            type="text"
-            id="chatInput"
-            placeholder="Ask something..."
-            onkeydown="handleChatKey(event)"
-        >
+        <!-- 2 -->
+        <div class="product-card">
+            <img src="/uploads/products/phone1.jpg" alt="Smartphone">
+
+            <div class="product-name">Smartphone</div>
+
+            <span class="category">Electronics</span>
+
+            <div class="description">
+                Modern smartphone with excellent display, camera and performance.
+            </div>
+
+            <div class="price">₹25,000</div>
+
+            <button class="buy-btn">Add to Cart</button>
+        </div>
 
 
-        <button onclick="sendMessage()">
-            Send
-        </button>
+        <!-- 3 -->
+        <div class="product-card">
+            <img src="/uploads/products/headphones.jpg" alt="Headphones">
 
-    </section>
+            <div class="product-name">Wireless Headphones</div>
+
+            <span class="category">Audio</span>
+
+            <div class="description">
+                Comfortable wireless headphones with clear sound and deep bass.
+            </div>
+
+            <div class="price">₹3,499</div>
+
+            <button class="buy-btn">Add to Cart</button>
+        </div>
 
 
-    <!-- FOOTER -->
+        <!-- 4 -->
+        <div class="product-card">
+            <img src="/uploads/products/watch.jpg" alt="Smart Watch">
 
-    <footer>
+            <div class="product-name">Smart Watch</div>
 
-        <p>
-            © 2026 DharaniMart
-        </p>
+            <span class="category">Wearables</span>
 
-    </footer>
+            <div class="description">
+                Smart watch with fitness tracking, notifications and health features.
+            </div>
+
+            <div class="price">₹4,999</div>
+
+            <button class="buy-btn">Add to Cart</button>
+        </div>
 
 
-    <script src="script.js"></script>
+        <!-- 5 -->
+        <div class="product-card">
+            <img src="/uploads/products/shoes.jpg" alt="Shoes">
 
+            <div class="product-name">Running Shoes</div>
+
+            <span class="category">Fashion</span>
+
+            <div class="description">
+                Lightweight and comfortable shoes for everyday use and running.
+            </div>
+
+            <div class="price">₹2,499</div>
+
+            <button class="buy-btn">Add to Cart</button>
+        </div>
+
+
+        <!-- 6 -->
+        <div class="product-card">
+            <img src="/uploads/products/bag.jpg" alt="Backpack">
+
+            <div class="product-name">College Backpack</div>
+
+            <span class="category">Bags</span>
+
+            <div class="description">
+                Spacious backpack suitable for college students and daily travel.
+            </div>
+
+            <div class="price">₹1,299</div>
+
+            <button class="buy-btn">Add to Cart</button>
+        </div>
+
+
+        <!-- 7 -->
+        <div class="product-card">
+            <img src="/uploads/products/earbuds.jpg" alt="Earbuds">
+
+            <div class="product-name">Wireless Earbuds</div>
+
+            <span class="category">Audio</span>
+
+            <div class="description">
+                Compact wireless earbuds with clear audio and convenient charging case.
+            </div>
+
+            <div class="price">₹1,999</div>
+
+            <button class="buy-btn">Add to Cart</button>
+        </div>
+
+
+        <!-- 8 -->
+        <div class="product-card">
+            <img src="/uploads/products/mouse.jpg" alt="Gaming Mouse">
+
+            <div class="product-name">Gaming Mouse</div>
+
+            <span class="category">Computer Accessories</span>
+
+            <div class="description">
+                Ergonomic gaming mouse with responsive controls and RGB lighting.
+            </div>
+
+            <div class="price">₹1,499</div>
+
+            <button class="buy-btn">Add to Cart</button>
+        </div>
+
+
+        <!-- 9 -->
+        <div class="product-card">
+            <img src="/uploads/products/keyboard.jpg" alt="Keyboard">
+
+            <div class="product-name">RGB Keyboard</div>
+
+            <span class="category">Computer Accessories</span>
+
+            <div class="description">
+                Mechanical-style RGB keyboard suitable for gaming and programming.
+            </div>
+
+            <div class="price">₹2,299</div>
+
+            <button class="buy-btn">Add to Cart</button>
+        </div>
+
+
+        <!-- 10 -->
+        <div class="product-card">
+            <img src="/uploads/products/ssd.jpg" alt="SSD">
+
+            <div class="product-name">Portable SSD</div>
+
+            <span class="category">Storage</span>
+
+            <div class="description">
+                High-speed portable SSD for storing and transferring your important files.
+            </div>
+
+            <div class="price">₹6,499</div>
+
+            <button class="buy-btn">Add to Cart</button>
+        </div>
+
+
+        <!-- 11 -->
+        <div class="product-card">
+            <img src="/uploads/products/bottle.jpg" alt="Water Bottle">
+
+            <div class="product-name">Water Bottle</div>
+
+            <span class="category">Lifestyle</span>
+
+            <div class="description">
+                Durable reusable bottle suitable for college, office and travel.
+            </div>
+
+            <div class="price">₹599</div>
+
+            <button class="buy-btn">Add to Cart</button>
+        </div>
+
+
+        <!-- 12 -->
+        <div class="product-card">
+            <img src="/uploads/products/sunglasses.jpg" alt="Sunglasses">
+
+            <div class="product-name">Sunglasses</div>
+
+            <span class="category">Fashion</span>
+
+            <div class="description">
+                Stylish sunglasses suitable for everyday outdoor use.
+            </div>
+
+            <div class="price">₹899</div>
+
+            <button class="buy-btn">Add to Cart</button>
+        </div>
+
+
+        <!-- 13 -->
+        <div class="product-card">
+            <img src="/uploads/products/powerbank.jpg" alt="Power Bank">
+
+            <div class="product-name">Wireless Power Bank</div>
+
+            <span class="category">Electronics</span>
+
+            <div class="description">
+                Portable power bank for convenient charging while travelling.
+            </div>
+
+            <div class="price">₹2,499</div>
+
+            <button class="buy-btn">Add to Cart</button>
+        </div>
+
+
+        <!-- 14 -->
+        <div class="product-card">
+            <img src="/uploads/products/laptop_bag.jpg" alt="Laptop Bag">
+
+            <div class="product-name">Laptop Bag</div>
+
+            <span class="category">Bags</span>
+
+            <div class="description">
+                Professional laptop bag with multiple compartments for accessories.
+            </div>
+
+            <div class="price">₹1,799</div>
+
+            <button class="buy-btn">Add to Cart</button>
+        </div>
+
+
+        <!-- 15 -->
+        <div class="product-card">
+            <img src="/uploads/products/notebook.jpg" alt="Notebook">
+
+            <div class="product-name">Premium Notebook</div>
+
+            <span class="category">Stationery</span>
+
+            <div class="description">
+                Premium notebook suitable for college notes, planning and writing.
+            </div>
+
+            <div class="price">₹299</div>
+
+            <button class="buy-btn">Add to Cart</button>
+        </div>
+
+    </div>
+</div>
+<script src="script.js"></script>
 </body>
-
 </html>

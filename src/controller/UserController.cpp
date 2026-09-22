@@ -1,103 +1,120 @@
 #include "UserController.h"
+
 UserController::UserController()
-    : userRepository(),
+    : database(),
+      userRepository(database),
       userService(userRepository)
 {
+    database.connect();
 }
+
 void UserController::registerUser(
     const drogon::HttpRequestPtr& request,
-    std::function<void(const drogon::HttpResponsePtr&)>&& callback)
+    std::function<void(
+        const drogon::HttpResponsePtr&)>&& callback)
 {
-    LOG_INFO << "Request body: " << request->getBody();
-
     Json::Value response;
 
-    auto json = request->getJsonObject();
+    response["success"] = false;
 
-    if (!json)
+    if (!request->getJsonObject())
     {
-        response["success"] = false;
         response["message"] = "Invalid JSON";
 
-        auto resp =
-            drogon::HttpResponse::newHttpJsonResponse(response);
+        callback(
+            drogon::HttpResponse::newHttpJsonResponse(response)
+        );
 
-        callback(resp);
         return;
     }
 
+    auto json = request->getJsonObject();
+
     User user;
 
-    user.name = (*json)["name"].asString();
-    user.email = (*json)["email"].asString();
-    user.passwordHash = (*json)["password"].asString();
-    user.role = (*json)["role"].asString();
+    user.name =
+        (*json)["name"].asString();
+
+    user.email =
+        (*json)["email"].asString();
+
+    user.passwordHash =
+        (*json)["password"].asString();
+
+    user.role =
+        (*json)["role"].asString();
 
     if (user.role.empty())
     {
         user.role = "BUYER";
     }
 
-    bool success = userService.registerUser(user);
+    bool result =
+        userService.registerUser(user);
 
-    response["success"] = success;
+    response["success"] = result;
 
-    if (success)
-    {
-        response["message"] = "Registration successful";
-    }
-    else
-    {
-        response["message"] = "Registration failed";
-    }
+    response["message"] =
+        result
+            ? "Registration successful"
+            : "Registration failed";
 
-    auto resp =
-        drogon::HttpResponse::newHttpJsonResponse(response);
-
-    callback(resp);
+    callback(
+        drogon::HttpResponse::newHttpJsonResponse(response)
+    );
 }
 
 void UserController::loginUser(
     const drogon::HttpRequestPtr& request,
-    std::function<void(const drogon::HttpResponsePtr&)>&& callback)
+    std::function<void(
+        const drogon::HttpResponsePtr&)>&& callback)
 {
     Json::Value response;
 
-    auto json = request->getJsonObject();
+    response["success"] = false;
 
-    if (!json)
+    if (!request->getJsonObject())
     {
-        response["success"] = false;
         response["message"] = "Invalid JSON";
 
-        auto resp =
-            drogon::HttpResponse::newHttpJsonResponse(response);
+        callback(
+            drogon::HttpResponse::newHttpJsonResponse(response)
+        );
 
-        callback(resp);
         return;
     }
 
-    std::string email = (*json)["email"].asString();
-    std::string password = (*json)["password"].asString();
+    auto json = request->getJsonObject();
 
-    User user = userService.loginUser(email, password);
+    std::string email =
+        (*json)["email"].asString();
+
+    std::string password =
+        (*json)["password"].asString();
+
+    User user =
+        userService.loginUser(
+            email,
+            password
+        );
 
     if (user.id != 0)
     {
         response["success"] = true;
         response["message"] = "Login successful";
-        response["data"]["name"] = user.name;
-        response["data"]["email"] = user.email;
-        response["data"]["role"] = user.role;
+
+        response["user"]["id"] = user.id;
+        response["user"]["name"] = user.name;
+        response["user"]["email"] = user.email;
+        response["user"]["role"] = user.role;
     }
     else
     {
-        response["success"] = false;
-        response["message"] = "Invalid email or password";
+        response["message"] =
+            "Invalid email or password";
     }
 
-    auto resp =
-        drogon::HttpResponse::newHttpJsonResponse(response);
-
-    callback(resp);
+    callback(
+        drogon::HttpResponse::newHttpJsonResponse(response)
+    );
 }

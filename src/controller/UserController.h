@@ -1,11 +1,13 @@
 #pragma once
 
 #include "../service/UserService.h"
-#include "../repository/UserRepository.h"
+#include "../repository/PostgreSQL/PostgreSQLUserRepository.h"
+#include "../repository/PostgreSQL/PostgreSQLConnection.h"
 
 #include <drogon/HttpController.h>
 
-class UserController : public drogon::HttpController<UserController>
+class UserController
+    : public drogon::HttpController<UserController>
 {
 public:
 
@@ -27,22 +29,23 @@ public:
 
     METHOD_LIST_END
 
-
     void registerUser(
         const drogon::HttpRequestPtr& request,
-        std::function<void(const drogon::HttpResponsePtr&)>&& callback
+        std::function<void(
+            const drogon::HttpResponsePtr&)>&& callback
     );
-
 
     void loginUser(
         const drogon::HttpRequestPtr& request,
-        std::function<void(const drogon::HttpResponsePtr&)>&& callback
+        std::function<void(
+            const drogon::HttpResponsePtr&)>&& callback
     );
-
 
 private:
 
-    UserRepository userRepository;
+    PostgreSQLConnection database;
+
+    PostgreSQLUserRepository userRepository;
 
     UserService userService;
 };

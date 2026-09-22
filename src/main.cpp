@@ -25,23 +25,33 @@ bool initializeDatabase()
 
     std::stringstream buffer;
     buffer << file.rdbuf();
+
     std::string sql = buffer.str();
 
     char* errorMessage = nullptr;
 
-    if (sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errorMessage) != SQLITE_OK)
+    if (sqlite3_exec(
+            db,
+            sql.c_str(),
+            nullptr,
+            nullptr,
+            &errorMessage) != SQLITE_OK)
     {
-        LOG_ERROR << "Database schema creation failed: "
-                  << errorMessage;
+        LOG_ERROR
+            << "Database schema creation failed: "
+            << errorMessage;
 
         sqlite3_free(errorMessage);
         sqlite3_close(db);
+
         return false;
     }
 
     sqlite3_close(db);
 
-    LOG_INFO << "DharaniMart SQLite database initialized successfully";
+    LOG_INFO
+        << "DharaniMart SQLite database initialized successfully";
+
     return true;
 }
 
@@ -51,31 +61,91 @@ int main()
 
     drogon::app()
         .setLogLevel(trantor::Logger::kInfo)
+
+        // Frontend
         .setDocumentRoot("./frontend")
-        .addListener("127.0.0.1", 8080)
+
+        // Upload folder
+        .setUploadPath("./uploads")
+
+        // Product images
+        .registerHandler(
+            "/uploads/products/{1}",
+            [](const drogon::HttpRequestPtr&,
+               std::function<void(
+                   const drogon::HttpResponsePtr&)>&& callback,
+               const std::string& fileName)
+            {
+                std::string filePath =
+                    "./uploads/products/" + fileName;
+
+                std::ifstream file(filePath);
+
+                if (!file.is_open())
+                {
+                    Json::Value error;
+
+                    error["success"] = false;
+                    error["message"] = "Image not found";
+
+                    auto response =
+                        drogon::HttpResponse::newHttpJsonResponse(
+                            error);
+
+                    response->setStatusCode(
+                        drogon::k404NotFound);
+
+                    callback(response);
+
+                    return;
+                }
+
+                auto response =
+                    drogon::HttpResponse::newFileResponse(
+                        filePath);
+
+                callback(response);
+            },
+            {drogon::Get})
+
+        // Server
+        .addListener(
+            "127.0.0.1",
+            8080)
+
+        // Health API
         .registerHandler(
             "/api/v1/health",
             [dbReady](
                 const drogon::HttpRequestPtr&,
-                std::function<void(const drogon::HttpResponsePtr&)>&& callback)
+                std::function<void(
+                    const drogon::HttpResponsePtr&)>&& callback)
             {
                 Json::Value response;
 
                 response["success"] = true;
+
                 response["data"]["status"] = "UP";
+
                 response["data"]["db"] =
-                    dbReady ? "CONNECTED" : "NOT_CONNECTED";
-                response["error"] = Json::nullValue;
+                    dbReady
+                        ? "CONNECTED"
+                        : "NOT_CONNECTED";
+
+                response["error"] =
+                    Json::nullValue;
 
                 auto resp =
-                    drogon::HttpResponse::newHttpJsonResponse(response);
+                    drogon::HttpResponse::newHttpJsonResponse(
+                        response);
 
                 callback(resp);
             },
             {drogon::Get});
 
     LOG_INFO
-        << "DharaniMart server starting on http://127.0.0.1:8080";
+        << "DharaniMart server starting on "
+        << "http://127.0.0.1:8080";
 
     drogon::app().run();
 

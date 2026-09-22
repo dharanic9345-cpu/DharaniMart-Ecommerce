@@ -15,7 +15,7 @@ function showProducts() {
 // REGISTER
 // ======================================
 
-async function register() {
+async function showRegister() {
 
     let name =
         document.getElementById("registerName").value;
@@ -49,11 +49,8 @@ async function register() {
                 body: JSON.stringify({
 
                     name: name,
-
                     email: email,
-
                     password: password,
-
                     role: "BUYER"
 
                 })
@@ -118,7 +115,6 @@ async function login() {
                 body: JSON.stringify({
 
                     email: email,
-
                     password: password
 
                 })
@@ -186,21 +182,52 @@ async function loadProducts() {
                 "product";
 
 
+            // Product image
+
+            let imageHtml = "";
+
+            if (product.imageUrl) {
+
+                imageHtml = `
+                    <img
+                        src="${product.imageUrl}"
+                        alt="${product.name}"
+                        class="product-image"
+                    >
+                `;
+
+            }
+
+
             productDiv.innerHTML = `
 
-                <h3>${product.name}</h3>
+                ${imageHtml}
 
-                <p>${product.category}</p>
+                <h3>
+                    ${product.name}
+                </h3>
 
-                <p>${product.description}</p>
+                <p>
+                    ${product.category}
+                </p>
 
-                <p>₹${product.price}</p>
+                <p>
+                    ${product.description}
+                </p>
 
-                <p>Stock: ${product.stock}</p>
+                <p>
+                    ₹${product.price}
+                </p>
+
+                <p>
+                    Stock: ${product.stock}
+                </p>
 
                 <button
                     onclick="addToCart(${product.id})">
+
                     Add to Cart
+
                 </button>
 
             `;
@@ -238,9 +265,7 @@ async function addToCart(productId) {
                 body: JSON.stringify({
 
                     buyerId: currentUserId,
-
                     productId: productId,
-
                     quantity: 1
 
                 })
@@ -348,15 +373,40 @@ async function loadCart() {
                 "product";
 
 
+            let cartImage = "";
+
+            if (product.imageUrl) {
+
+                cartImage = `
+                    <img
+                        src="${product.imageUrl}"
+                        alt="${product.name}"
+                        class="product-image"
+                    >
+                `;
+
+            }
+
+
             itemDiv.innerHTML = `
 
-                <h3>${product.name}</h3>
+                ${cartImage}
 
-                <p>Price: ₹${product.price}</p>
+                <h3>
+                    ${product.name}
+                </h3>
 
-                <p>Quantity: ${item.quantity}</p>
+                <p>
+                    Price: ₹${product.price}
+                </p>
 
-                <p>Total: ₹${total}</p>
+                <p>
+                    Quantity: ${item.quantity}
+                </p>
+
+                <p>
+                    Total: ₹${total}
+                </p>
 
             `;
 
@@ -431,7 +481,6 @@ async function checkout(totalAmount) {
                     body: JSON.stringify({
 
                         buyerId: currentUserId,
-
                         totalAmount: totalAmount
 
                     })
@@ -502,7 +551,6 @@ async function checkout(totalAmount) {
                     body: JSON.stringify({
 
                         orderId: orderId,
-
                         paymentStatus: "PAID"
 
                     })
@@ -673,11 +721,8 @@ async function addReview() {
                     body: JSON.stringify({
 
                         productId: Number(productId),
-
                         buyerId: currentUserId,
-
                         rating: Number(rating),
-
                         comment: comment
 
                     })
@@ -988,7 +1033,24 @@ async function loadAdminProducts() {
                 "admin-box";
 
 
+            let adminImage = "";
+
+            if (product.imageUrl) {
+
+                adminImage = `
+                    <img
+                        src="${product.imageUrl}"
+                        alt="${product.name}"
+                        class="product-image"
+                    >
+                `;
+
+            }
+
+
             box.innerHTML = `
+
+                ${adminImage}
 
                 <h3>
                     Product ID: ${product.id}
@@ -1223,7 +1285,6 @@ function sendMessage() {
     let input =
         document.getElementById("chatInput");
 
-
     let message =
         input.value.trim();
 
@@ -1243,109 +1304,56 @@ function sendMessage() {
     input.value = "";
 
 
-    let lowerMessage =
-        message.toLowerCase();
+    fetch(
+        "/api/v1/chat",
+        {
+            method: "POST",
 
+            headers: {
+                "Content-Type": "application/json"
+            },
 
-    let reply =
-        "";
+            body: JSON.stringify({
+                message: message
+            })
+        }
+    )
+    .then(response => response.json())
 
+    .then(data => {
 
-    if (
-        lowerMessage.includes("hello") ||
-        lowerMessage.includes("hi") ||
-        lowerMessage.includes("hey")
-    ) {
-
-        reply =
-            "Hello! Welcome to DharaniMart. How can I help you?";
-
-    }
-
-    else if (
-        lowerMessage.includes("product") ||
-        lowerMessage.includes("products")
-    ) {
-
-        reply =
-            "You can view available products in the Products section.";
-
-    }
-
-    else if (
-        lowerMessage.includes("cart")
-    ) {
-
-        reply =
-            "You can add products to your shopping cart and view the total amount in the Cart section.";
-
-    }
-
-    else if (
-        lowerMessage.includes("order")
-    ) {
-
-        reply =
-            "You can check your previous orders in the Order History section.";
-
-    }
-
-    else if (
-        lowerMessage.includes("payment")
-    ) {
-
-        reply =
-            "DharaniMart currently supports a mock payment confirmation for testing.";
-
-    }
-
-    else if (
-        lowerMessage.includes("review") ||
-        lowerMessage.includes("rating")
-    ) {
-
-        reply =
-            "You can submit a product rating from the Product Reviews & Ratings section.";
-
-    }
-
-    else if (
-        lowerMessage.includes("admin")
-    ) {
-
-        reply =
-            "The Admin section allows management of users, products and orders.";
-
-    }
-
-    else if (
-        lowerMessage.includes("price")
-    ) {
-
-        reply =
-            "You can check the price of each product in the Products section.";
-
-    }
-
-    else {
-
-        reply =
-            "Sorry, I can currently help with products, cart, orders, payments, reviews and DharaniMart features.";
-
-    }
-
-
-    setTimeout(
-        function () {
+        if (data.success) {
 
             addChatMessage(
-                reply,
+                data.reply,
                 "bot"
             );
 
-        },
-        400
-    );
+        }
+        else {
+
+            addChatMessage(
+                "Sorry, I could not process your message.",
+                "bot"
+            );
+
+        }
+
+    })
+
+    .catch(error => {
+
+        console.error(
+            "Chat error:",
+            error
+        );
+
+        addChatMessage(
+            "Sorry, something went wrong. Please try again.",
+            "bot"
+        );
+
+    });
 }
 
 
@@ -1372,3 +1380,84 @@ loadProducts();
 loadCart();
 
 loadOrders();
+function showLogin()
+{
+    const email = prompt("Enter your email:");
+    if (!email) return;
+
+    const password = prompt("Enter your password:");
+    if (!password) return;
+
+    fetch("/api/v1/auth/login",
+    {
+        method: "POST",
+        headers:
+        {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(
+        {
+            email: email,
+            password: password
+        })
+    })
+    .then(response => response.json())
+    .then(data =>
+    {
+        if (data.success)
+        {
+            alert(
+                "Login successful! Welcome "
+                + data.user.name
+            );
+        }
+        else
+        {
+            alert(data.message);
+        }
+    })
+    .catch(error =>
+    {
+        console.error(error);
+        alert("Login failed. Please try again.");
+    });
+}
+
+
+function showRegister()
+{
+    const name = prompt("Enter your name:");
+    if (!name) return;
+
+    const email = prompt("Enter your email:");
+    if (!email) return;
+
+    const password = prompt("Create a password:");
+    if (!password) return;
+
+    fetch("/api/v1/auth/register",
+    {
+        method: "POST",
+        headers:
+        {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(
+        {
+            name: name,
+            email: email,
+            password: password,
+            role: "BUYER"
+        })
+    })
+    .then(response => response.json())
+    .then(data =>
+    {
+        alert(data.message);
+    })
+    .catch(error =>
+    {
+        console.error(error);
+        alert("Registration failed. Please try again.");
+    });
+}

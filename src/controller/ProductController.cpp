@@ -1,5 +1,6 @@
 #include "ProductController.h"
 
+
 void ProductController::addProduct(
     const drogon::HttpRequestPtr& request,
     std::function<void(
@@ -40,6 +41,10 @@ void ProductController::addProduct(
     product.category =
         (*json)["category"].asString();
 
+    // Product image path
+    product.imageUrl =
+        (*json)["imageUrl"].asString();
+
     bool success =
         productService.addProduct(product);
 
@@ -60,6 +65,10 @@ void ProductController::addProduct(
         drogon::HttpResponse::newHttpJsonResponse(response));
 }
 
+
+// =====================================================
+// GET ALL PRODUCTS
+// =====================================================
 
 void ProductController::getAllProducts(
     const drogon::HttpRequestPtr&,
@@ -85,6 +94,7 @@ void ProductController::getAllProducts(
         item["price"] = product.price;
         item["stock"] = product.stock;
         item["category"] = product.category;
+        item["imageUrl"] = product.imageUrl;
 
         response["data"].append(item);
     }
@@ -94,7 +104,10 @@ void ProductController::getAllProducts(
 }
 
 
+// =====================================================
 // SEARCH + CATEGORY FILTER
+// =====================================================
+
 void ProductController::searchProducts(
     const drogon::HttpRequestPtr& request,
     std::function<void(
@@ -127,6 +140,7 @@ void ProductController::searchProducts(
         item["price"] = product.price;
         item["stock"] = product.stock;
         item["category"] = product.category;
+        item["imageUrl"] = product.imageUrl;
 
         response["data"].append(item);
     }
@@ -135,6 +149,10 @@ void ProductController::searchProducts(
         drogon::HttpResponse::newHttpJsonResponse(response));
 }
 
+
+// =====================================================
+// GET SELLER PRODUCTS
+// =====================================================
 
 void ProductController::getSellerProducts(
     const drogon::HttpRequestPtr&,
@@ -161,6 +179,7 @@ void ProductController::getSellerProducts(
         item["price"] = product.price;
         item["stock"] = product.stock;
         item["category"] = product.category;
+        item["imageUrl"] = product.imageUrl;
 
         response["data"].append(item);
     }
@@ -169,6 +188,10 @@ void ProductController::getSellerProducts(
         drogon::HttpResponse::newHttpJsonResponse(response));
 }
 
+
+// =====================================================
+// UPDATE PRODUCT
+// =====================================================
 
 void ProductController::updateProduct(
     const drogon::HttpRequestPtr& request,
@@ -213,6 +236,10 @@ void ProductController::updateProduct(
     product.category =
         (*json)["category"].asString();
 
+    // Updated product image path
+    product.imageUrl =
+        (*json)["imageUrl"].asString();
+
     bool success =
         productService.updateProduct(product);
 
@@ -233,6 +260,10 @@ void ProductController::updateProduct(
         drogon::HttpResponse::newHttpJsonResponse(response));
 }
 
+
+// =====================================================
+// DELETE PRODUCT
+// =====================================================
 
 void ProductController::deleteProduct(
     const drogon::HttpRequestPtr& request,
