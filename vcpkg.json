@@ -1,3 +1,4 @@
+
 {
   "name": "dharani-mart",
   "version-string": "0.1.0",
@@ -5,9 +6,6 @@
   "builtin-baseline": "e6f9e70a29a3e80a1fc510d8503304315447112f",
   "dependencies": [
     "drogon",
-    "libsodium",
-    "nlohmann-json",
-    "sqlite3",
-    "gtest"
+    "sqlite3"
   ]
 }
