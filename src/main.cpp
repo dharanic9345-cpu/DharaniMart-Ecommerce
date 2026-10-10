@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <cstdlib>
 
 bool initializeDatabase()
 {
@@ -110,8 +111,12 @@ int main()
 
         // Server
         .addListener(
-            "127.0.0.1",
-            8080)
+    "0.0.0.0",
+    []() {
+        const char* port = std::getenv("PORT");
+        return port ? std::stoi(port) : 10000;
+    }()
+)
 
         // Health API
         .registerHandler(
