@@ -36,15 +36,25 @@ nav{display:flex;gap:8px;flex-wrap:wrap}.hero{padding:35px 5%;background:#e4edf7
 <footer>DharaniMart © 2026 | Online Shopping Marketplace</footer>
 <script>
 const products=[
-['Laptop','Electronics',45000],['Smartphone','Electronics',25000],['Wireless Headphones','Audio',3499],
-['Smart Watch','Wearables',4999],['Running Shoes','Fashion',2499],['College Backpack','Bags',1299],
-['Wireless Earbuds','Audio',1999],['Gaming Mouse','Accessories',1499],['RGB Keyboard','Accessories',2299],
-['Portable SSD','Storage',6499],['Water Bottle','Lifestyle',599],['Sunglasses','Fashion',899],
-['Power Bank','Electronics',2499],['Laptop Bag','Bags',1799],['Premium Notebook','Stationery',299]
+['Laptop','Electronics',45000,'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500'],
+['Smartphone','Electronics',25000,'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500'],
+['Wireless Headphones','Audio',3499,'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500'],
+['Smart Watch','Wearables',4999,'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500'],
+['Wireless Earbuds','Audio',1999,'https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?w=500'],
+['Gaming Mouse','Accessories',1499,'https://images.unsplash.com/photo-1527814050087-3793815479db?w=500'],
+['RGB Keyboard','Accessories',2299,'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500'],
+['Monitor','Computers',7999,'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500'],
+['Wi-Fi Router','Networking',3499,'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=500'],
+['External Hard Drive','Storage',5999,'https://images.unsplash.com/photo-1531492746076-161ca9bcad58?w=500'],
+['Printer','Office Equipment',8999,'https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?w=500'],
+['Webcam','Accessories',2499,'https://images.unsplash.com/photo-1587826080692-f439cd0b70da?w=500'],
+['Bluetooth Speaker','Audio',3999,'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500'],
+['Gaming Headset','Audio',4499,'https://images.unsplash.com/photo-1599669454699-248893623440?w=500'],
+['Tablet','Electronics',18999,'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500']
 ];
 let cart=[],registered=null;
 function show(id){['home','login','register','cart','orders'].forEach(x=>document.getElementById(x).classList.toggle('hidden',x!==id));if(id==='cart')renderCart();window.scrollTo(0,0)}
-function renderProducts(){document.getElementById('products').innerHTML=products.map((p,i)=>`<article class="card"><img src="https://placehold.co/300x180?text=Product" alt="Product image" style="width:100%;height:180px;object-fit:contain;border-radius:10px;"><h3>${p[0]}</h3><p class="muted">${p[1]}</p><div class="price">₹${p[2].toLocaleString('en-IN')}</div><button onclick="add(${i})">Add to Cart</button></article>`).join('')}
+function renderProducts(){document.getElementById('products').innerHTML=products.map((p,i)=>`<article class="card"><img src="${p[3]}" alt="${p[0]}" loading="lazy" style="width:100%;height:180px;object-fit:contain;border-radius:10px;background:#f5f7fa;"><h3>${p[0]}</h3><p class="muted">${p[1]}</p><div class="price">₹${p[2].toLocaleString('en-IN')}</div><button onclick="add(${i})">Add to Cart</button></article>`).join('')}
 function add(i){let item=cart.find(x=>x.i===i);if(item)item.qty++;else cart.push({i,qty:1});document.getElementById('count').textContent=cart.reduce((s,x)=>s+x.qty,0);alert(products[i][0]+' added to cart!')}
 function renderCart(){let el=document.getElementById('cartItems');if(!cart.length){el.innerHTML='<p>Your cart is empty.</p>';document.getElementById('total').textContent='Total: ₹0';return}el.innerHTML=cart.map(x=>`<p>${products[x.i][0]} × ${x.qty} — ₹${(products[x.i][2]*x.qty).toLocaleString('en-IN')} <button onclick="removeItem(${x.i})">Remove</button></p>`).join('');document.getElementById('total').textContent='Total: ₹'+cart.reduce((s,x)=>s+products[x.i][2]*x.qty,0).toLocaleString('en-IN')}
 function removeItem(i){cart=cart.filter(x=>x.i!==i);document.getElementById('count').textContent=cart.reduce((s,x)=>s+x.qty,0);renderCart()}
@@ -55,4 +65,5 @@ renderProducts();
 </script>
 </body>
 </html>
+
 
