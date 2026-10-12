@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DharaniMart | Online Shopping</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9;color:#222}
+header{background:#232f3e;color:white;padding:18px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+h1{color:#ff9900;margin:0}button{padding:10px 15px;border:0;border-radius:6px;cursor:pointer;font-weight:bold;background:#ff9900}
+nav{display:flex;gap:8px;flex-wrap:wrap}.hero{padding:35px 5%;background:#e4edf7}
+.container{padding:25px 5%}.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px}
+.card,.panel{background:white;border-radius:10px;padding:18px;box-shadow:0 2px 8px #0001}
+.card h3{margin-bottom:8px}.price{font-size:20px;color:#b12704;font-weight:bold}.card button{width:100%;margin-top:8px}
+.panel{margin:20px 5%;max-width:600px}.panel input{display:block;width:100%;padding:12px;margin:10px 0;border:1px solid #bbb;border-radius:5px}
+.hidden{display:none}.muted{color:#666}footer{text-align:center;padding:25px;background:#232f3e;color:white}
+</style>
+</head>
+<body>
+<header><h1>DharaniMart</h1><nav>
+<button onclick="show('home')">Home</button><button onclick="show('login')">Login</button>
+<button onclick="show('register')">Register</button><button onclick="show('cart')">Cart (<span id="count">0</span>)</button>
+</nav></header>
+<section id="home">
+<div class="hero"><h2>Welcome to DharaniMart!</h2><p>Everything you need, all in one place.</p><button onclick="document.getElementById('products').scrollIntoView()">Shop Now</button></div>
+<div class="container"><h2>Our Products</h2><div class="products" id="products"></div></div>
+</section>
+<section id="login" class="panel hidden"><h2>Login</h2><p class="muted">Demo login for this frontend.</p>
+<form onsubmit="demoLogin(event)"><input id="liEmail" type="email" placeholder="Email address" required><input id="liPassword" type="password" placeholder="Password" required><button>Login</button></form>
+<p>New customer? <a href="#" onclick="show('register')">Create account</a></p></section>
+<section id="register" class="panel hidden"><h2>Create Account</h2>
+<form onsubmit="demoRegister(event)"><input id="reName" placeholder="Full name" required><input id="reEmail" type="email" placeholder="Email address" required><input id="rePassword" type="password" minlength="4" placeholder="Create password" required><button>Register</button></form>
+<p>Already registered? <a href="#" onclick="show('login')">Login</a></p></section>
+<section id="cart" class="container hidden"><h2>Your Shopping Cart</h2><div id="cartItems"></div><h3 id="total">Total: ₹0</h3><button onclick="placeOrder()">Place Order</button><p class="muted">Demo order only. No real payment will be taken.</p></section>
+<section id="orders" class="container hidden"><h2>Order Confirmation</h2><div id="orderMessage"></div><button onclick="show('home')">Continue Shopping</button></section>
+<footer>DharaniMart © 2026 | Online Shopping Marketplace</footer>
+<script>
+const products=[
+['Laptop','Electronics',45000],['Smartphone','Electronics',25000],['Wireless Headphones','Audio',3499],
+['Smart Watch','Wearables',4999],['Running Shoes','Fashion',2499],['College Backpack','Bags',1299],
+['Wireless Earbuds','Audio',1999],['Gaming Mouse','Accessories',1499],['RGB Keyboard','Accessories',2299],
+['Portable SSD','Storage',6499],['Water Bottle','Lifestyle',599],['Sunglasses','Fashion',899],
+['Power Bank','Electronics',2499],['Laptop Bag','Bags',1799],['Premium Notebook','Stationery',299]
+];
+let cart=[],registered=null;
+function show(id){['home','login','register','cart','orders'].forEach(x=>document.getElementById(x).classList.toggle('hidden',x!==id));if(id==='cart')renderCart();window.scrollTo(0,0)}
+function renderProducts(){document.getElementById('products').innerHTML=products.map((p,i)=>`<article class="card"><img src="https://placehold.co/300x180?text=Product" alt="Product image" style="width:100%;height:180px;object-fit:contain;border-radius:10px;"><h3>${p[0]}</h3><p class="muted">${p[1]}</p><div class="price">₹${p[2].toLocaleString('en-IN')}</div><button onclick="add(${i})">Add to Cart</button></article>`).join('')}
+function add(i){let item=cart.find(x=>x.i===i);if(item)item.qty++;else cart.push({i,qty:1});document.getElementById('count').textContent=cart.reduce((s,x)=>s+x.qty,0);alert(products[i][0]+' added to cart!')}
+function renderCart(){let el=document.getElementById('cartItems');if(!cart.length){el.innerHTML='<p>Your cart is empty.</p>';document.getElementById('total').textContent='Total: ₹0';return}el.innerHTML=cart.map(x=>`<p>${products[x.i][0]} × ${x.qty} — ₹${(products[x.i][2]*x.qty).toLocaleString('en-IN')} <button onclick="removeItem(${x.i})">Remove</button></p>`).join('');document.getElementById('total').textContent='Total: ₹'+cart.reduce((s,x)=>s+products[x.i][2]*x.qty,0).toLocaleString('en-IN')}
+function removeItem(i){cart=cart.filter(x=>x.i!==i);document.getElementById('count').textContent=cart.reduce((s,x)=>s+x.qty,0);renderCart()}
+function demoRegister(e){e.preventDefault();registered={name:document.getElementById('reName').value,email:document.getElementById('reEmail').value,password:document.getElementById('rePassword').value};alert('Demo registration successful! You can log in on this page.');show('login')}
+function demoLogin(e){e.preventDefault();let email=document.getElementById('liEmail').value,password=document.getElementById('liPassword').value;if(registered&&registered.email===email&&registered.password===password){alert('Welcome, '+registered.name+'!');show('home')}else{alert('This is a demo. Register first in this browser session, then log in.')}}
+function placeOrder(){if(!cart.length){alert('Your cart is empty. Add a product first.');return}let total=cart.reduce((s,x)=>s+products[x.i][2]*x.qty,0);document.getElementById('orderMessage').textContent='Demo order placed! Total: ₹'+total.toLocaleString('en-IN')+'. No payment was processed.';cart=[];document.getElementById('count').textContent='0';show('orders')}
+renderProducts();
+</script>
+</body>
+</html>
+
