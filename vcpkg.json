@@ -6,6 +6,7 @@
   "builtin-baseline": "e6f9e70a29a3e80a1fc510d8503304315447112f",
   "dependencies": [
     "drogon",
-    "sqlite3"
+    "sqlite3",
+    "libsodium"
   ]
 }

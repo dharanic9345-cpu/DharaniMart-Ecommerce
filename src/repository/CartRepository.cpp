@@ -12,6 +12,39 @@ bool CartRepository::addToCart(
     {
         return false;
     }
+      // Validate buyer, product and quantity
+  if (buyerId <= 0 || productId <= 0 || quantity <= 0)
+  {
+      sqlite3_close(db);
+      return false;
+  }
+
+  // Check whether product exists
+  const char* productSql =
+      "SELECT id FROM products WHERE id = ?;";
+
+  sqlite3_stmt* productStatement = nullptr;
+
+  if (sqlite3_prepare_v2(
+          db, productSql, -1,
+          &productStatement, nullptr) != SQLITE_OK)
+  {
+      sqlite3_close(db);
+      return false;
+  }
+
+  sqlite3_bind_int(productStatement, 1, productId);
+
+  bool productExists =
+      (sqlite3_step(productStatement) == SQLITE_ROW);
+
+  sqlite3_finalize(productStatement);
+
+  if (!productExists)
+  {
+      sqlite3_close(db);
+      return false;
+  }
 
     // Create cart if buyer does not have one
     const char* cartSql =

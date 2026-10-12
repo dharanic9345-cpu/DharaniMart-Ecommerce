@@ -1,8 +1,7 @@
 #pragma once
 
 #include "../service/UserService.h"
-#include "../repository/PostgreSQL/PostgreSQLUserRepository.h"
-#include "../repository/PostgreSQL/PostgreSQLConnection.h"
+#include "../repository/UserRepository.h"
 
 #include <drogon/HttpController.h>
 
@@ -10,7 +9,6 @@ class UserController
     : public drogon::HttpController<UserController>
 {
 public:
-
     UserController();
 
     METHOD_LIST_BEGIN
@@ -42,10 +40,6 @@ public:
     );
 
 private:
-
-    PostgreSQLConnection database;
-
-    PostgreSQLUserRepository userRepository;
-
+    UserRepository userRepository;
     UserService userService;
 };

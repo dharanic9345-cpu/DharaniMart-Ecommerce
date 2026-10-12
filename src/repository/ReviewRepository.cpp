@@ -1,3 +1,4 @@
+#include <iostream>
 #include "ReviewRepository.h"
 #include <sqlite3.h>
 
@@ -35,9 +36,15 @@ bool ReviewRepository::addReview(const Review& review)
         -1,
         SQLITE_TRANSIENT);
 
-    bool success =
-        (sqlite3_step(statement) == SQLITE_DONE);
+    int result = sqlite3_step(statement);
 
+if (result != SQLITE_DONE)
+{
+    std::cerr << "Review insert failed: "
+              << sqlite3_errmsg(db) << std::endl;
+}
+
+bool success = (result == SQLITE_DONE);
     sqlite3_finalize(statement);
     sqlite3_close(db);
 

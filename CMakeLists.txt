@@ -24,14 +24,9 @@ find_package(GTest CONFIG REQUIRED)
 add_executable(DharaniMart
 
     src/main.cpp
-
-    # PostgreSQL
-    src/repository/PostgreSQL/PostgreSQLConnection.cpp
-    src/repository/PostgreSQL/PostgreSQLConnection.h
-    src/repository/PostgreSQL/PostgreSQLUserRepository.cpp
-    src/repository/PostgreSQL/PostgreSQLUserRepository.h
-
-    # User
+     
+    
+       # User
     src/repository/UserRepository.cpp
     src/service/UserService.cpp
     src/controller/UserController.cpp
@@ -76,8 +71,7 @@ target_link_libraries(DharaniMart
 
     unofficial-sodium::sodium
 
-    PostgreSQL::PostgreSQL
-)
+   )
 
 
 target_compile_features(DharaniMart
