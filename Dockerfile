@@ -38,7 +38,7 @@ RUN cmake -S . -B build \
     -DCMAKE_TOOLCHAIN_FILE=/opt/vcpkg/scripts/buildsystems/vcpkg.cmake \
     -DVCPKG_MANIFEST_MODE=ON
 
-RUN cmake --build build --parallel 2
+RUN cmake --build build --parallel 1
 
 EXPOSE 10000
 
